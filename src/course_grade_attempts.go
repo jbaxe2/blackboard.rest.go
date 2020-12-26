@@ -92,3 +92,47 @@ func (restGradeAttempts *_BbRestCourseGradeAttempts) GetAttemptFileMetadataList 
 
   return attemptFiles, err
 }
+
+/**
+ * The [AttachFile] method...
+ */
+func (restGradeAttempts *_BbRestCourseGradeAttempts) AttachFile() error {
+  return nil
+}
+
+/**
+ * The [GetAttemptFileMetadata] method...
+ */
+func (restGradeAttempts *_BbRestCourseGradeAttempts) GetAttemptFileMetadata (
+  courseId string, attemptId string, attemptFileId string,
+) (course_grade_attempts.AttemptFile, error) {
+  var attemptFile course_grade_attempts.AttemptFile
+  var err error
+  var result interface{}
+
+  endpoint := config.CourseGradeAttemptsEndpoints["file_metadata"]
+  endpoint = strings.Replace (endpoint, "{courseId}", courseId, -1)
+  endpoint = strings.Replace (endpoint, "{attemptId}", attemptId, -1)
+  endpoint = strings.Replace (endpoint, "{attemptFileId}", attemptFileId, -1)
+
+  result, err = restGradeAttempts.service.Connector.SendBbRequest (
+    endpoint, "GET", make (map[string]interface{}), 1,
+  )
+
+  if nil != err {
+    return attemptFile, err
+  }
+
+  attemptFile = factory.NewAttemptFile (result.(map[string]interface{}))
+
+  return attemptFile, err
+}
+
+/**
+ * The [DownloadAttemptFile] method...
+ */
+func (restGradeAttempts *_BbRestCourseGradeAttempts) DownloadAttemptFile (
+  courseId string, attemptId string, attemptFileId string,
+) ([]byte, error) {
+  return nil, nil
+}
